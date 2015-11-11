@@ -7,11 +7,13 @@ def detect(img):
     hammer = cv2.CascadeClassifier("hammer.xml")
     drill = cv2.CascadeClassifier("handDrill.xml")
     saw = cv2.CascadeClassifier("saw.xml")
+    wireCutter = cv2.CascadeClassifier("WireCutter.xml")
     hammerRects = hammer.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (335,335))
     sawRects = saw.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (300,300))
     drillRects = drill.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (300,300))
+    wireRects = wireCutter.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (300,300))
 
-    if (len(hammerRects) == 0 and len(sawRects) == 0 and len(drillRects) == 0):
+    if (len(hammerRects) == 0 and len(sawRects) == 0 and len(drillRects) == 0 and len(wireRects) == 0):
         return [], img, ""
     elif(len(hammerRects) != 0):
         hammerRects[:, 2:] += hammerRects[:, :2]
@@ -22,6 +24,9 @@ def detect(img):
     elif(len(drillRects) != 0):
         drillRects[:, 2:] += drillRects[:, :2]
         return drillRects, img, "hand drill"
+    elif(len(wireRects) != 0):
+	wireRects[:, 2:] += wireRects[:, :2]
+	return wireRects, img, "wire cutter"
 
 def box(rects, img, txt):
     for x1, y1, x2, y2 in rects:
